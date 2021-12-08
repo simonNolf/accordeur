@@ -72,7 +72,7 @@ class AnalyseAudio(Thread):
         return note_name
 
     def run(self):
-        """fonction principale on utilise le l'etrée audio et on applique la transformée de Fourrier"""
+        """fonction principale on utilise l'entrée audio et on applique la transformée de Fourrier"""
         self.running = True
         while self.running:
             try:
@@ -97,10 +97,10 @@ class AnalyseAudio(Thread):
                     magnitude_data[:hps_len] *= magnitude_data_orig[::i]
 
                 # récupération de la fréquence correspndante
-                frequencies = np.fft.fftfreq(int((len(magnitude_data) * 2) / 1),
-                                             1. / self.Sampling)
+                frequencies = np.fft.fftfreq(int((len(magnitude_data) * 2)),
+                                             1 / self.Sampling)
 
-                # set ytoutes les fréquence en dessous de 60 à 0
+                # set toutes les fréquence en dessous de 60 à 0
                 for i, freq in enumerate(frequencies):
                     if freq > 60:
                         magnitude_data[:i - 1] = 0
@@ -128,5 +128,5 @@ if __name__ == "__main__":
     while True:
         q_data = q.get()
         if q_data is not None:
-            print("fréquence forte: ", q_data, "note la plus proche: ", a.freq_to_note(q_data, 440))
+            print("fréquence forte: ", q_data, "note la plus proche: ", a.freq_to_note(q_data, 440) + '(' ')')
             time.sleep(0.02)

@@ -47,10 +47,10 @@ class Frame(tkinter.Frame):
                                                             width=self.needle_width,
                                                             capstyle=tkinter.ROUND)
 
-        self.display_inner_circle = self.under_canvas.create_oval(Settings.CANVAS_SIZE * 0.2,
-                                                                  Settings.CANVAS_SIZE * 0.2,
-                                                                  Settings.CANVAS_SIZE * 0.8,
-                                                                  Settings.CANVAS_SIZE * 0.8,
+        self.display_inner_circle = self.under_canvas.create_oval(Settings.CANVAS_SIZE,
+                                                                  Settings.CANVAS_SIZE,
+                                                                  Settings.CANVAS_SIZE,
+                                                                  Settings.CANVAS_SIZE,
                                                                   fill=self.color_manager.theme_dark,
                                                                   width=0)
         self.bottom_frame = tkinter.Frame(master=self, bg=self.color_manager.background_layer_0)
@@ -78,13 +78,13 @@ class Frame(tkinter.Frame):
 
         self.higher_note_text = self.upper_canvas.create_text(Settings.CANVAS_SIZE * 0.95, Settings.CANVAS_SIZE * 0.1,
                                                               anchor=tkinter.E,
-                                                              text="A#",
+                                                              text="do",
                                                               fill=self.color_manager.text_2,
                                                               font=self.font_manager.note_display_font_medium)
 
         self.lower_note_text = self.upper_canvas.create_text(Settings.CANVAS_SIZE * 0.05, Settings.CANVAS_SIZE * 0.1,
                                                              anchor=tkinter.W,
-                                                             text="B#",
+                                                             text="la",
                                                              fill=self.color_manager.text_2,
                                                              font=self.font_manager.note_display_font_medium)
 
@@ -109,15 +109,7 @@ class Frame(tkinter.Frame):
         self.button_frequency.place(anchor=tkinter.SW, relx=0.05, rely=0.9)
 
 
-        self.button_mute = TkinterCustomButtonImageset(master=self,
-                                                       bg_color=self.color_manager.background_layer_1,
-                                                       image_dict={"standard": self.image_manager.bell_image,
-                                                                   "clicked": self.image_manager.bell_muted_image,
-                                                                   "standard_hover": self.image_manager.bell_hovered_image,
-                                                                   "clicked_hover": self.image_manager.bell_muted_hovered_image},
-                                                       height=self.image_manager.bell_image.height(),
-                                                       width=self.image_manager.bell_image.width())
-        self.button_mute.place(anchor=tkinter.NE, relx=0.95, rely=0.05)
+
 
     def update_color(self):
         self.configure(bg=self.color_manager.background_layer_1)
@@ -136,7 +128,6 @@ class Frame(tkinter.Frame):
         self.upper_canvas.itemconfig(self.lower_note_text, fill=self.color_manager.text_2)
         self.upper_canvas.itemconfig(self.frequency_text, fill=self.color_manager.text_2)
 
-        self.button_mute.label.configure(bg=self.color_manager.background_layer_1)
 
         self.bottom_frame.configure(bg=self.color_manager.background_layer_0)
 

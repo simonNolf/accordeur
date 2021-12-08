@@ -2,18 +2,13 @@ import tkinter
 import tkinter.messagebox
 import os
 import sys
-import json
-import requests
-import webbrowser
 import time
 import numpy as np
-import random
-from distutils.version import StrictVersion as Version
 
+from distutils.version import StrictVersion as Version
 from audio.analyse_audio import AnalyseAudio
 from audio.threading_help import ProtectedList
 from audio.sound_thread import ThreadAudio
-
 from apparence.color import ColorManager
 from apparence.image import ImageManager
 from apparence.font import FontManager
@@ -34,13 +29,6 @@ from settings import Settings
 
 class App(tkinter.Tk):
     def __init__(self, *args, **kwargs):
-        if not Settings.COMPILED_APP_MODE:
-            if sys.platform == "darwin":  # macOS
-                if Version(tkinter.Tcl().call("info", "patchlevel")) >= Version("8.6.9"):  # Tcl/Tk >= 8.6.9
-                    os.system("defaults write -g NSRequiresAquaSystemAppearance -bool No")  # Only for dark-mode testing!
-                    # WARNING: This command applies macOS dark-mode on all programs. This can cause bugs on some programs.
-                    # Currently this works only with anaconda python version (python.org Tcl/Tk version is only 8.6.8).
-                    pass
 
         tkinter.Tk.__init__(self, *args, **kwargs)
 
@@ -99,8 +87,6 @@ class App(tkinter.Tk):
 
         self.draw_main_frame()
 
-
-
         self.open_app_time = time.time()
 
     @staticmethod
@@ -116,20 +102,7 @@ class App(tkinter.Tk):
         self.settings_frame.place_forget()
         self.main_frame.place(relx=0, rely=0, relheight=1, relwidth=1)
 
-
-
-
     def on_closing(self, event=0):
-        self.write_user_setting("bell_muted", self.main_frame.button_mute.is_pressed())
-        self.check_for_updates()
-
-        if not Settings.COMPILED_APP_MODE:
-            if sys.platform == "darwin":  # macOS
-                if Version(tkinter.Tcl().call("info", "patchlevel")) >= Version("8.6.9"):  # Tcl/Tk >= 8.6.9
-                    os.system("defaults delete -g NSRequiresAquaSystemAppearance")  # Only for dark-mode testing!
-                    # This command reverts the dark-mode setting for all programs.
-                    pass
-
         self.audio_analyzer.running = False
         self.play_sound_thread.running = False
         self.destroy()
@@ -153,33 +126,31 @@ class App(tkinter.Tk):
     def start(self):
         self.handle_appearance_mode_change()
 
-
-
         while self.audio_analyzer.running:
 
             try:
-                # handle the change from dark to light mode, light to dark mode
+                # change le thème en clair ou sombre
                 self.handle_appearance_mode_change()
 
-                # get the current frequency from the queue
+                # prend la fréquence actulle dans la queue
                 freq = self.frequency_queue.get()
                 if freq is not None:
 
-                    # convert frequency to note number
+                    # converti la frequence vers le numéro de la note
                     number = self.audio_analyzer.freq_to_num(freq, self.a4_frequency)
 
-                    # calculate nearest note number, name and frequency
+                    # calcule la note la plus proche, la nom de la note et la fréquence
                     nearest_note_number = round(number)
                     nearest_note_freq = self.audio_analyzer.num_to_freq(nearest_note_number, self.a4_frequency)
 
-                    # calculate frequency difference from freq to nearest note
+                    # calcule la différence de fréquence entre la note et la note la plus proche
                     freq_difference = nearest_note_freq - freq
 
-                    # calculate the frequency difference to the next note (-1)
-                    semitone_step = nearest_note_freq - self.audio_analyzer.num_to_freq(round(number-1),
-                                                                                                self.a4_frequency)
+                    # calcule la différence de fréquence (-1)
+                    semitone_step = nearest_note_freq - self.audio_analyzer.num_to_freq(round(number - 1),
+                                                                                        self.a4_frequency)
 
-                    # calculate the angle of the display needle
+                    # calcule l'angle a afficher
                     needle_angle = -90 * ((freq_difference / semitone_step) * 2)
 
                     # buffer the current nearest note number change
@@ -189,7 +160,7 @@ class App(tkinter.Tk):
                             self.nearest_note_number_buffered = nearest_note_number
                             self.note_number_counter = 0
 
-                    # if needle in range +-5 degrees then make it green, otherwise red
+                    # change la couleur du curseur en fonction de sa position
                     if abs(freq_difference) < 0.25:
                         self.main_frame.set_needle_color("green")
                         self.tone_hit_counter += 1
@@ -197,24 +168,22 @@ class App(tkinter.Tk):
                         self.main_frame.set_needle_color("red")
                         self.tone_hit_counter = 0
 
-                    # after 7 hits of the right note in a row play the sound
+                    # après 7 fréquences consécutives correcte, joue le son
                     if self.tone_hit_counter > 7:
                         self.tone_hit_counter = 0
 
-                        if self.main_frame.button_mute.is_pressed() is not True:
-                            self.play_sound_thread.play_sound()
-
-                    # update needle buffer array
+                    # met a jour le buffer
                     self.needle_buffer_array[:-1] = self.needle_buffer_array[1:]
                     self.needle_buffer_array[-1:] = needle_angle
 
-                    # update ui note labels and display needle
+                    # met a jour la gui
                     self.main_frame.set_needle_angle(np.average(self.needle_buffer_array))
-                    self.main_frame.set_note_names(note_name=self.audio_analyzer.num_to_note(self.nearest_note_number_buffered),
-                                                   note_name_lower=self.audio_analyzer.num_to_note(self.nearest_note_number_buffered - 1),
-                                                   note_name_higher=self.audio_analyzer.num_to_note(self.nearest_note_number_buffered + 1))
+                    self.main_frame.set_note_names(
+                        note_name=self.audio_analyzer.num_to_note(self.nearest_note_number_buffered),
+                        note_name_lower=self.audio_analyzer.num_to_note(self.nearest_note_number_buffered - 1) + "\nserrer",
+                        note_name_higher=self.audio_analyzer.num_to_note(self.nearest_note_number_buffered + 1) + "\nresserer")
 
-                    # calculate difference in cents
+                    # calcule la différence en cents
                     if semitone_step == 0:
                         diff_cents = 0
                     else:
@@ -222,7 +191,7 @@ class App(tkinter.Tk):
                     freq_label_text = f"+{round(-diff_cents, 1)} cents" if -diff_cents > 0 else f"{round(-diff_cents, 1)} cents"
                     self.main_frame.set_freq_diff(freq_label_text)
 
-                    # set current frequency
+                    # set la fréquence actuelle
                     if freq is not None: self.main_frame.set_freq(freq)
 
                 self.update()
