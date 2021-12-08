@@ -2,8 +2,6 @@ import tkinter
 from math import sin, radians
 
 from gui.tkinter_custom_button import TkinterCustomButton
-from gui.tkinter_custom_button_image import TkinterCustomButtonImageset
-from settings import Settings
 
 
 class Frame(tkinter.Frame):
@@ -20,37 +18,37 @@ class Frame(tkinter.Frame):
         self.under_canvas = tkinter.Canvas(master=self,
                                            bg=self.color_manager.background_layer_1,
                                            highlightthickness=0,
-                                           height=Settings.CANVAS_SIZE,
-                                           width=Settings.CANVAS_SIZE)
+                                           height=300,
+                                           width=300)
 
         self.under_canvas.place(anchor=tkinter.CENTER, relx=0.5, rely=0.5)
 
         self.display_outer_circle = self.under_canvas.create_oval(0,
                                                                   0,
-                                                                  Settings.CANVAS_SIZE - 1,
-                                                                  Settings.CANVAS_SIZE - 1,
+                                                                  300 - 1,
+                                                                  300 - 1,
                                                                   fill=self.color_manager.theme_main,
                                                                   width=0)
 
-        self.display_background_line = self.under_canvas.create_line(Settings.CANVAS_SIZE * 0.5,
-                                                                     Settings.CANVAS_SIZE * 0.5,
-                                                                     Settings.CANVAS_SIZE * 0.5,
-                                                                     -Settings.CANVAS_SIZE * 0.5,
+        self.display_background_line = self.under_canvas.create_line(300 * 0.5,
+                                                                     300 * 0.5,
+                                                                     300 * 0.5,
+                                                                     -300 * 0.5,
                                                                      fill=self.color_manager.background_layer_1,
-                                                                     width=Settings.CANVAS_SIZE * 0.05)
+                                                                     width=300 * 0.05)
         self.needle_width = 8
-        self.display_needle = self.under_canvas.create_line(Settings.CANVAS_SIZE * 0.5,
-                                                            Settings.CANVAS_SIZE * 0.5,
-                                                            Settings.CANVAS_SIZE * 0.5,
-                                                            Settings.CANVAS_SIZE * 0.05,
+        self.display_needle = self.under_canvas.create_line(300 * 0.5,
+                                                            300 * 0.5,
+                                                            300 * 0.5,
+                                                            300 * 0.05,
                                                             fill=self.color_manager.needle,
                                                             width=self.needle_width,
                                                             capstyle=tkinter.ROUND)
 
-        self.display_inner_circle = self.under_canvas.create_oval(Settings.CANVAS_SIZE,
-                                                                  Settings.CANVAS_SIZE,
-                                                                  Settings.CANVAS_SIZE,
-                                                                  Settings.CANVAS_SIZE,
+        self.display_inner_circle = self.under_canvas.create_oval(300 * 0.2,
+                                                                  300 * 0.2,
+                                                                  300 * 0.8,
+                                                                  300 * 0.8,
                                                                   fill=self.color_manager.theme_dark,
                                                                   width=0)
         self.bottom_frame = tkinter.Frame(master=self, bg=self.color_manager.background_layer_0)
@@ -58,14 +56,14 @@ class Frame(tkinter.Frame):
         self.upper_canvas = tkinter.Canvas(master=self.bottom_frame,
                                            bg=self.color_manager.background_layer_0,
                                            highlightthickness=0,
-                                           height=Settings.CANVAS_SIZE / 2,
-                                           width=Settings.CANVAS_SIZE)
+                                           height=300 / 2,
+                                           width=300)
         self.upper_canvas.place(anchor=tkinter.N, relx=0.5, rely=0)
 
-        self.display_inner_circle_2 = self.upper_canvas.create_oval(Settings.CANVAS_SIZE * 0.2,
-                                                                    -Settings.CANVAS_SIZE * 0.3,
-                                                                    Settings.CANVAS_SIZE * 0.8,
-                                                                    Settings.CANVAS_SIZE * 0.3,
+        self.display_inner_circle_2 = self.upper_canvas.create_oval(300 * 0.2,
+                                                                    -300 * 0.3,
+                                                                    300 * 0.8,
+                                                                    300 * 0.3,
                                                                     fill=self.color_manager.theme_dark,
                                                                     width=0)
 
@@ -76,19 +74,19 @@ class Frame(tkinter.Frame):
                                         font=self.font_manager.note_display_font)
         self.note_label.place(relx=0.5, rely=0.5, anchor=tkinter.CENTER)
 
-        self.higher_note_text = self.upper_canvas.create_text(Settings.CANVAS_SIZE * 0.95, Settings.CANVAS_SIZE * 0.1,
+        self.higher_note_text = self.upper_canvas.create_text(300 * 0.95, 300 * 0.1,
                                                               anchor=tkinter.E,
                                                               text="do",
                                                               fill=self.color_manager.text_2,
                                                               font=self.font_manager.note_display_font_medium)
 
-        self.lower_note_text = self.upper_canvas.create_text(Settings.CANVAS_SIZE * 0.05, Settings.CANVAS_SIZE * 0.1,
+        self.lower_note_text = self.upper_canvas.create_text(300 * 0.05, 300 * 0.1,
                                                              anchor=tkinter.W,
                                                              text="la",
                                                              fill=self.color_manager.text_2,
                                                              font=self.font_manager.note_display_font_medium)
 
-        self.frequency_text = self.upper_canvas.create_text(Settings.CANVAS_SIZE * 0.5, Settings.CANVAS_SIZE * 0.16,
+        self.frequency_text = self.upper_canvas.create_text(300 * 0.5, 300 * 0.16,
                                                             anchor=tkinter.N,
                                                             text="- Hz",
                                                             fill=self.color_manager.text_2,
@@ -151,10 +149,10 @@ class Frame(tkinter.Frame):
         y = sin(radians(270 - deg))
 
         self.under_canvas.coords(self.display_needle,
-                                 Settings.CANVAS_SIZE * 0.5,
-                                 Settings.CANVAS_SIZE * 0.5,
-                                 Settings.CANVAS_SIZE * 0.5 + (Settings.CANVAS_SIZE * 0.45 * x),
-                                 Settings.CANVAS_SIZE * 0.5 + (Settings.CANVAS_SIZE * 0.45 * y))
+                                 300 * 0.5,
+                                 300 * 0.5,
+                                 300 * 0.5 + (300 * 0.45 * x),
+                                 300 * 0.5 + (300 * 0.45 * y))
         return x, y
 
     def set_note_names(self, note_name, note_name_lower, note_name_higher):

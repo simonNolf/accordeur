@@ -24,7 +24,6 @@ except ImportError:
      (Github Version is missing the module because of private API key) """
     usage_monitor = None
 
-from settings import Settings
 
 
 class App(tkinter.Tk):
@@ -48,9 +47,9 @@ class App(tkinter.Tk):
         self.play_sound_thread = ThreadAudio(self.main_path + "/assets/sounds/drop.wav")
         self.play_sound_thread.start()
 
-        self.timer = Timer(Settings.FPS)
+        self.timer = Timer(60)
 
-        self.needle_buffer_array = np.zeros(Settings.NEEDLE_BUFFER_LENGTH)
+        self.needle_buffer_array = np.zeros(30)
         self.tone_hit_counter = 0
         self.note_number_counter = 0
         self.nearest_note_number_buffered = 69
@@ -58,11 +57,11 @@ class App(tkinter.Tk):
 
         self.dark_mode_active = False
 
-        self.title(Settings.APP_NAME)
-        self.geometry(str(Settings.WIDTH) + "x" + str(Settings.HEIGHT))
+        self.title('Accordeur de guitare')
+        self.geometry(str(450) + "x" + str(440))
         self.resizable(True, True)
-        self.minsize(Settings.WIDTH, Settings.HEIGHT)
-        self.maxsize(Settings.MAX_WIDTH, Settings.MAX_HEIGHT)
+        self.minsize(450, 440)
+        self.maxsize(600, 500)
         self.configure(background=self.color_manager.background_layer_1)
 
         self.protocol("WM_DELETE_WINDOW", self.on_closing)
@@ -77,7 +76,7 @@ class App(tkinter.Tk):
             app_menu = tkinter.Menu(menu_bar, name='apple')
             menu_bar.add_cascade(menu=app_menu)
 
-            app_menu.add_command(label='About ' + Settings.APP_NAME, command=self.about_dialog)
+            app_menu.add_command(label='About ' + 'Accordeur de guitare', command=self.about_dialog)
             app_menu.add_separator()
 
             self.config(menu=menu_bar)
@@ -91,8 +90,7 @@ class App(tkinter.Tk):
 
     @staticmethod
     def about_dialog():
-        tkinter.messagebox.showinfo(title=Settings.APP_NAME,
-                                    message=Settings.ABOUT_TEXT)
+        tkinter.messagebox.showinfo(title="Accordeur de guitare")
 
     def draw_settings_frame(self, event=0):
         self.main_frame.place_forget()
@@ -156,7 +154,7 @@ class App(tkinter.Tk):
                     # buffer the current nearest note number change
                     if nearest_note_number != self.nearest_note_number_buffered:
                         self.note_number_counter += 1
-                        if self.note_number_counter >= Settings.HITS_TILL_NOTE_NUMBER_UPDATE:
+                        if self.note_number_counter >= 15:
                             self.nearest_note_number_buffered = nearest_note_number
                             self.note_number_counter = 0
 

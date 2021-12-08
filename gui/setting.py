@@ -3,7 +3,6 @@ import webbrowser
 
 from gui.tkinter_custom_button_image import TkinterCustomButtonImageset
 from gui.tkinter_custom_button import TkinterCustomButton
-from settings import Settings
 
 
 class SettingsFrame(tkinter.Frame):
@@ -33,20 +32,6 @@ class SettingsFrame(tkinter.Frame):
                                                height=40,
                                                command=self.master.draw_main_frame)
         self.button_back.place(anchor=tkinter.SE, relx=0.95, rely=0.75)
-
-        self.button_website = TkinterCustomButton(master=self.bottom_frame,
-                                                  bg_color=self.color_manager.background_layer_0,
-                                                  fg_color=self.color_manager.theme_main,
-                                                  hover_color=self.color_manager.theme_light,
-                                                  text_font=self.font_manager.button_font,
-                                                  text="Website",
-                                                  text_color=self.color_manager.text_main,
-                                                  corner_radius=10,
-                                                  width=110,
-                                                  height=40,
-                                                  command=self.website_button)
-        self.button_website.place(anchor=tkinter.SW, relx=0.05, rely=0.75)
-
 
         self.label_note_text = tkinter.Label(master=self,
                                              bg=self.color_manager.background_layer_1,
@@ -83,10 +68,11 @@ class SettingsFrame(tkinter.Frame):
                                                                  height=50,
                                                                  width=150,
                                                                  bg_color=self.color_manager.background_layer_1,
-                                                                 image_dict={"standard": self.image_manager.arrowDown_image,
-                                                                             "clicked": self.image_manager.arrowDown_image,
-                                                                             "standard_hover": self.image_manager.arrowDown_image_hovered,
-                                                                             "clicked_hover": self.image_manager.arrowDown_image_hovered},
+                                                                 image_dict={
+                                                                     "standard": self.image_manager.arrowDown_image,
+                                                                     "clicked": self.image_manager.arrowDown_image,
+                                                                     "standard_hover": self.image_manager.arrowDown_image_hovered,
+                                                                     "clicked_hover": self.image_manager.arrowDown_image_hovered},
                                                                  command=self.frequency_button_down)
         self.button_frequency_down.place(anchor=tkinter.CENTER, relx=0.5, rely=0.6)
 
@@ -98,11 +84,6 @@ class SettingsFrame(tkinter.Frame):
                                          fg_color=self.color_manager.theme_main,
                                          hover_color=self.color_manager.theme_light,
                                          text_color=self.color_manager.text_main)
-
-        self.button_website.configure_color(bg_color=self.color_manager.background_layer_0,
-                                            fg_color=self.color_manager.theme_main,
-                                            hover_color=self.color_manager.theme_light,
-                                            text_color=self.color_manager.text_main)
 
         self.label_note_text.configure(bg=self.color_manager.background_layer_1, fg=self.color_manager.text_2)
 
@@ -122,6 +103,3 @@ class SettingsFrame(tkinter.Frame):
         if self.master.a4_frequency > 1:
             self.master.a4_frequency -= 1
             self.label_frequency.set_text(str(self.master.a4_frequency) + " Hz")
-
-    def website_button(self):
-        webbrowser.open(Settings.GITHUB_URL_README)
