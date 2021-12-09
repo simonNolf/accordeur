@@ -3,10 +3,10 @@ import sys
 
 
 class Timer(object):
-    """ Timer makes current thread sleep until time
-        of set FPS is over. If time is already over
-        the Timer does nothing or prints a warning
-        if specified """
+    """ Timer met en mode sleep le thread jusqu a ce
+        que le temps du set FPS soit termine. Si le temps
+        est termine le Timer ne fait rien ou affiche un message
+        en cas d'erreur"""
 
     def __init__(self, fps, warnings=False):
         self.fps = fps

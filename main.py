@@ -5,12 +5,10 @@ import sys
 import time
 import numpy as np
 
-from distutils.version import StrictVersion as Version
 from audio.analyse_audio import AnalyseAudio
 from audio.threading_help import ProtectedList
 from audio.sound_thread import ThreadAudio
 from apparence.color import ColorManager
-from apparence.image import ImageManager
 from apparence.font import FontManager
 from apparence.timing import Timer
 
@@ -25,7 +23,6 @@ except ImportError:
     usage_monitor = None
 
 
-
 class App(tkinter.Tk):
     def __init__(self, *args, **kwargs):
 
@@ -35,7 +32,6 @@ class App(tkinter.Tk):
 
         self.color_manager = ColorManager()
         self.font_manager = FontManager()
-        self.image_manager = ImageManager(self.main_path)
         self.frequency_queue = ProtectedList()
 
         self.main_frame = Frame(self)
@@ -92,15 +88,15 @@ class App(tkinter.Tk):
     def about_dialog():
         tkinter.messagebox.showinfo(title="Accordeur de guitare")
 
-    def draw_settings_frame(self, event=0):
+    def draw_settings_frame(self):
         self.main_frame.place_forget()
         self.settings_frame.place(relx=0, rely=0, relheight=1, relwidth=1)
 
-    def draw_main_frame(self, event=0):
+    def draw_main_frame(self):
         self.settings_frame.place_forget()
         self.main_frame.place(relx=0, rely=0, relheight=1, relwidth=1)
 
-    def on_closing(self, event=0):
+    def on_closing(self):
         self.audio_analyzer.running = False
         self.play_sound_thread.running = False
         self.destroy()
@@ -109,28 +105,13 @@ class App(tkinter.Tk):
         self.main_frame.update_color()
         self.settings_frame.update_color()
 
-    def handle_appearance_mode_change(self):
-        dark_mode_state = self.color_manager.detect_os_dark_mode()
-
-        if dark_mode_state is not self.dark_mode_active:
-            if dark_mode_state is True:
-                self.color_manager.set_mode("Dark")
-            else:
-                self.color_manager.set_mode("Light")
-
-            self.dark_mode_active = dark_mode_state
-            self.update_color()
-
     def start(self):
-        self.handle_appearance_mode_change()
 
         while self.audio_analyzer.running:
 
             try:
-                # change le thème en clair ou sombre
-                self.handle_appearance_mode_change()
 
-                # prend la fréquence actulle dans la queue
+                # prend la fréquence actuelle dans la queue
                 freq = self.frequency_queue.get()
                 if freq is not None:
 
@@ -151,7 +132,7 @@ class App(tkinter.Tk):
                     # calcule l'angle a afficher
                     needle_angle = -90 * ((freq_difference / semitone_step) * 2)
 
-                    # buffer the current nearest note number change
+                    # la note actuelle la plus proche change dans le buffer
                     if nearest_note_number != self.nearest_note_number_buffered:
                         self.note_number_counter += 1
                         if self.note_number_counter >= 15:
@@ -170,23 +151,23 @@ class App(tkinter.Tk):
                     if self.tone_hit_counter > 7:
                         self.tone_hit_counter = 0
 
-                    # met a jour le buffer
+                    # met à jour le buffer
                     self.needle_buffer_array[:-1] = self.needle_buffer_array[1:]
                     self.needle_buffer_array[-1:] = needle_angle
 
-                    # met a jour la gui
+                    # met à jour la gui
                     self.main_frame.set_needle_angle(np.average(self.needle_buffer_array))
                     self.main_frame.set_note_names(
                         note_name=self.audio_analyzer.num_to_note(self.nearest_note_number_buffered),
-                        note_name_lower=self.audio_analyzer.num_to_note(self.nearest_note_number_buffered - 1) + "\nserrer",
-                        note_name_higher=self.audio_analyzer.num_to_note(self.nearest_note_number_buffered + 1) + "\nresserer")
+                        note_name_lower=self.audio_analyzer.num_to_note(self.nearest_note_number_buffered - 1),
+                        note_name_higher=self.audio_analyzer.num_to_note(self.nearest_note_number_buffered + 1))
 
-                    # calcule la différence en cents
+                    # calcule la différence en demi-pas
                     if semitone_step == 0:
                         diff_cents = 0
                     else:
                         diff_cents = (freq_difference / semitone_step) * 100
-                    freq_label_text = f"+{round(-diff_cents, 1)} cents" if -diff_cents > 0 else f"{round(-diff_cents, 1)} cents"
+                    freq_label_text = f"+{round(-diff_cents, 1)} demi-pas  " if -diff_cents > 0 else f"{round(-diff_cents, 1)} demi-pas"
                     self.main_frame.set_freq_diff(freq_label_text)
 
                     # set la fréquence actuelle

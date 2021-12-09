@@ -3,23 +3,22 @@ import sys
 
 
 class TkinterCustomButton(tkinter.Frame):
-    """ tkinter custom button with border, rounded corners and hover effect
+    """ boutton customise avec bordure arrondi
 
-        Arguments:  master= where to place button
-                    bg_color= background color, None is standard,
-                    fg_color= foreground color, blue is standard,
-                    hover_color= foreground color, lightblue is standard,
-                    border_color= foreground color, None is standard,
-                    border_width= border thickness, 0 is standard,
-                    command= callback function, None is standard,
-                    width= width of button, 110 is standard,
-                    height= width of button, 35 is standard,
-                    corner_radius= corner radius, 10 is standard,
+        Arguments:  master= ou mettre le boutton
+                    bg_color= background color, None est standard,
+                    fg_color= foreground color, blue est standard,
+                    hover_color= foreground color, lightblue est standard,
+                    border_color= foreground color, None est standard,
+                    border_width= épaisseur des bordures, 0 est standard,
+                    command= callback de la function, None est standard,
+                    width= largeur du boutton, 110 est standard,
+                    height= hauteur du boutton, 35 est standard,
+                    corner_radius= rayon des coins, 10 est standard,
                     text_font= (<Name>, <Size>),
-                    text_color= text color, white is standard,
-                    text= text of button,
-                    hover= hover effect, True is standard,
-                    image= PIL.PhotoImage, standard is None"""
+                    text_color= couleur du text, white est standard,
+                    text= text du boutton,
+                    hover= effet de survol, True est standard"""
 
     def __init__(self,
                  bg_color=None,
@@ -35,7 +34,6 @@ class TkinterCustomButton(tkinter.Frame):
                  text_color="white",
                  text="CustomButton",
                  hover=True,
-                 image=None,
                  *args, **kwargs):
         super().__init__(*args, **kwargs)
 
@@ -69,15 +67,13 @@ class TkinterCustomButton(tkinter.Frame):
         self.text_color = text_color
         if text_font is None:
             if sys.platform == "darwin":  # macOS
-                self.text_font = ("Avenir", 13)
+                self.text_font = ("Avenger", 13)
             elif "win" in sys.platform:  # Windows
                 self.text_font = ("Century Gothic", 11)
             else:
-                self.text_font = ("TkDefaultFont")
+                self.text_font = "TkDefaultFont"
         else:
             self.text_font = text_font
-
-        self.image = image
 
         self.function = command
         self.hover = hover
@@ -85,7 +81,7 @@ class TkinterCustomButton(tkinter.Frame):
         self.configure(width=self.width, height=self.height)
 
         if sys.platform == "darwin" and self.hover is True:
-            self.configure(cursor="pointinghand")
+            self.configure(cursor="pointing-hand")
 
         self.canvas = tkinter.Canvas(master=self,
                                      highlightthicknes=0,
@@ -95,8 +91,8 @@ class TkinterCustomButton(tkinter.Frame):
         self.canvas.place(x=0, y=0)
 
         if self.hover is True:
-            self.canvas.bind("<Enter>", self.on_enter)
-            self.canvas.bind("<Leave>", self.on_leave)
+            self.canvas.bind("<Enter>", self.on)
+            self.canvas.bind("<Leave>", self.on)
 
         self.canvas.bind("<Button-1>", self.clicked)
         self.canvas.bind("<Button-1>", self.clicked)
@@ -115,10 +111,10 @@ class TkinterCustomButton(tkinter.Frame):
                                             fg=self.text_color)
             self.text_label.place(relx=0.5, rely=0.5, anchor=tkinter.CENTER)
 
-            # bind events the the button click and hover events also to the text_label
+            #
             if self.hover is True:
-                self.text_label.bind("<Enter>", self.on_enter)
-                self.text_label.bind("<Leave>", self.on_leave)
+                self.text_label.bind("<Enter>", self.on)
+                self.text_label.bind("<Leave>", self.on)
 
             self.text_label.bind("<Button-1>", self.clicked)
             self.text_label.bind("<Button-1>", self.clicked)
@@ -138,8 +134,8 @@ class TkinterCustomButton(tkinter.Frame):
 
             # bind events the the button click and hover events also to the image_label
             if self.hover is True:
-                self.image_label.bind("<Enter>", self.on_enter)
-                self.image_label.bind("<Leave>", self.on_leave)
+                self.image_label.bind("<Enter>", self.on)
+                self.image_label.bind("<Leave>", self.on)
 
             self.image_label.bind("<Button-1>", self.clicked)
             self.image_label.bind("<Button-1>", self.clicked)
@@ -189,18 +185,20 @@ class TkinterCustomButton(tkinter.Frame):
                                                                 self.border_width,
                                                                 self.border_width + self.inner_corner_radius * 2,
                                                                 self.border_width + self.inner_corner_radius * 2))
-            self.canvas_fg_parts.append(self.canvas.create_oval(self.width - self.border_width - self.inner_corner_radius * 2,
-                                                                self.border_width,
-                                                                self.width - self.border_width,
-                                                                self.border_width + self.inner_corner_radius * 2))
+            self.canvas_fg_parts.append(
+                self.canvas.create_oval(self.width - self.border_width - self.inner_corner_radius * 2,
+                                        self.border_width,
+                                        self.width - self.border_width,
+                                        self.border_width + self.inner_corner_radius * 2))
             self.canvas_fg_parts.append(self.canvas.create_oval(self.border_width,
                                                                 self.height - self.border_width - self.inner_corner_radius * 2,
                                                                 self.border_width + self.inner_corner_radius * 2,
-                                                                self.height-self.border_width))
-            self.canvas_fg_parts.append(self.canvas.create_oval(self.width - self.border_width - self.inner_corner_radius * 2,
-                                                                self.height - self.border_width - self.inner_corner_radius * 2,
-                                                                self.width - self.border_width,
                                                                 self.height - self.border_width))
+            self.canvas_fg_parts.append(
+                self.canvas.create_oval(self.width - self.border_width - self.inner_corner_radius * 2,
+                                        self.height - self.border_width - self.inner_corner_radius * 2,
+                                        self.width - self.border_width,
+                                        self.height - self.border_width))
 
         self.canvas_fg_parts.append(self.canvas.create_rectangle(self.border_width + self.inner_corner_radius,
                                                                  self.border_width,
@@ -248,7 +246,7 @@ class TkinterCustomButton(tkinter.Frame):
         if self.text_label is not None:
             self.text_label.configure(text=text, width=len(text))
 
-    def on_enter(self, event=0):
+    def on(self):
         for part in self.canvas_fg_parts:
             self.canvas.itemconfig(part, fill=self.hover_color, width=0)
 
@@ -260,19 +258,7 @@ class TkinterCustomButton(tkinter.Frame):
             # change background color of image_label
             self.image_label.configure(bg=self.hover_color)
 
-    def on_leave(self, event=0):
-        for part in self.canvas_fg_parts:
-            self.canvas.itemconfig(part, fill=self.fg_color, width=0)
-
-        if self.text_label is not None:
-            # change background color of image_label
-            self.text_label.configure(bg=self.fg_color)
-
-        if self.image_label is not None:
-            # change background color of image_label
-            self.image_label.configure(bg=self.fg_color)
-
-    def clicked(self, event=0):
+    def clicked(self):
         if self.function is not None:
             self.function()
             self.on_leave()

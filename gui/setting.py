@@ -1,8 +1,6 @@
 import tkinter
-import webbrowser
 
-from gui.tkinter_custom_button_image import TkinterCustomButtonImageset
-from gui.tkinter_custom_button import TkinterCustomButton
+from gui.tkinter_button import TkinterCustomButton
 
 
 class SettingsFrame(tkinter.Frame):
@@ -12,7 +10,6 @@ class SettingsFrame(tkinter.Frame):
         self.app_pointer = master
         self.color_manager = self.app_pointer.color_manager
         self.font_manager = self.app_pointer.font_manager
-        self.image_manager = self.app_pointer.image_manager
 
         self.configure(bg=self.color_manager.background_layer_1)
 
@@ -53,29 +50,6 @@ class SettingsFrame(tkinter.Frame):
                                                    hover=False)
         self.label_frequency.place(anchor=tkinter.CENTER, relx=0.5, rely=0.45)
 
-        self.button_frequency_up = TkinterCustomButtonImageset(master=self,
-                                                               height=50,
-                                                               width=150,
-                                                               bg_color=self.color_manager.background_layer_1,
-                                                               image_dict={"standard": self.image_manager.arrowUp_image,
-                                                                           "clicked": self.image_manager.arrowUp_image,
-                                                                           "standard_hover": self.image_manager.arrowUp_image_hovered,
-                                                                           "clicked_hover": self.image_manager.arrowUp_image_hovered},
-                                                               command=self.frequency_button_up)
-        self.button_frequency_up.place(anchor=tkinter.CENTER, relx=0.5, rely=0.3)
-
-        self.button_frequency_down = TkinterCustomButtonImageset(master=self,
-                                                                 height=50,
-                                                                 width=150,
-                                                                 bg_color=self.color_manager.background_layer_1,
-                                                                 image_dict={
-                                                                     "standard": self.image_manager.arrowDown_image,
-                                                                     "clicked": self.image_manager.arrowDown_image,
-                                                                     "standard_hover": self.image_manager.arrowDown_image_hovered,
-                                                                     "clicked_hover": self.image_manager.arrowDown_image_hovered},
-                                                                 command=self.frequency_button_down)
-        self.button_frequency_down.place(anchor=tkinter.CENTER, relx=0.5, rely=0.6)
-
     def update_color(self):
         self.configure(bg=self.color_manager.background_layer_1)
         self.bottom_frame.configure(bg=self.color_manager.background_layer_0)
@@ -91,15 +65,3 @@ class SettingsFrame(tkinter.Frame):
                                              fg_color=self.color_manager.theme_main,
                                              hover_color=self.color_manager.theme_light,
                                              text_color=self.color_manager.text_main)
-
-        self.button_frequency_up.label.configure(bg=self.color_manager.background_layer_1)
-        self.button_frequency_down.label.configure(bg=self.color_manager.background_layer_1)
-
-    def frequency_button_up(self):
-        self.master.a4_frequency += 1
-        self.label_frequency.set_text(str(self.master.a4_frequency) + " Hz")
-
-    def frequency_button_down(self):
-        if self.master.a4_frequency > 1:
-            self.master.a4_frequency -= 1
-            self.label_frequency.set_text(str(self.master.a4_frequency) + " Hz")

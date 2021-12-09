@@ -1,5 +1,4 @@
 import copy
-import time
 
 from pyaudio import PyAudio, paInt16
 from threading import Thread

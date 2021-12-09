@@ -2,8 +2,8 @@ from threading import Lock
 
 
 class ProtectedList(object):
-    """ file pour partager les données entre les thread avec une protection
-        longueur standart du buffer : 8"""
+    """ queue pour partager les données entre les thread avec une protection
+        longueur standard du buffer : 8"""
 
     def __init__(self, buffer_size=8):
         self.elements = []
@@ -13,10 +13,10 @@ class ProtectedList(object):
     def put(self, element):
         self.lock.acquire()
 
-        # append new element at the end of the list
+        # ajoute un nouvel élément à la fin de la liste
         self.elements.append(element)
 
-        # delete oldest element if list is too long
+        # supprime le puls vieux élément de la liste
         if len(self.elements) > self.buffer_size:
             self.elements.pop(0)
 
@@ -25,12 +25,10 @@ class ProtectedList(object):
     def get(self):
         self.lock.acquire()
 
-        # check if something is in the list
+        # vérifie que la liste n est pas vide
         if len(self.elements) > 0:
             element = self.elements[0]
             del self.elements[0]
-
-        # if list is empty return None
         else:
             element = None
 
@@ -44,5 +42,3 @@ class ProtectedList(object):
 
         self.lock.release()
         return string
-
-

@@ -1,7 +1,7 @@
 import tkinter
 from math import sin, radians
 
-from gui.tkinter_custom_button import TkinterCustomButton
+from gui.tkinter_button import TkinterCustomButton
 
 
 class Frame(tkinter.Frame):
@@ -11,8 +11,6 @@ class Frame(tkinter.Frame):
         self.app_pointer = master
         self.color_manager = self.app_pointer.color_manager
         self.font_manager = self.app_pointer.font_manager
-        self.image_manager = self.app_pointer.image_manager
-
         self.configure(bg=self.color_manager.background_layer_1)
 
         self.under_canvas = tkinter.Canvas(master=self,
@@ -100,14 +98,11 @@ class Frame(tkinter.Frame):
                                                     text="440 Hz",
                                                     text_color=self.color_manager.text_main,
                                                     corner_radius=10,
-                                                    width=110,
+                                                    width=150,
                                                     height=40,
                                                     hover=False,
                                                     command=None)
         self.button_frequency.place(anchor=tkinter.SW, relx=0.05, rely=0.9)
-
-
-
 
     def update_color(self):
         self.configure(bg=self.color_manager.background_layer_1)
