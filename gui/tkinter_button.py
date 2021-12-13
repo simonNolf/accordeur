@@ -102,45 +102,6 @@ class TkinterCustomButton(tkinter.Frame):
         self.text_label = None
         self.image_label = None
 
-        # no image given
-        if self.image is None:
-            # create tkinter.Label with text
-            self.text_label = tkinter.Label(master=self,
-                                            font=self.text_font,
-                                            bg=self.fg_color,
-                                            fg=self.text_color)
-            self.text_label.place(relx=0.5, rely=0.5, anchor=tkinter.CENTER)
-
-            #
-            if self.hover is True:
-                self.text_label.bind("<Enter>", self.on)
-                self.text_label.bind("<Leave>", self.on)
-
-            self.text_label.bind("<Button-1>", self.clicked)
-            self.text_label.bind("<Button-1>", self.clicked)
-
-            self.set_text(self.text)
-
-        # use the given image
-        else:
-            # create tkinter.Label with image on it
-            self.image_label = tkinter.Label(master=self,
-                                             image=self.image,
-                                             bg=self.fg_color)
-
-            self.image_label.place(relx=0.5,
-                                   rely=0.5,
-                                   anchor=tkinter.CENTER)
-
-            # bind events the the button click and hover events also to the image_label
-            if self.hover is True:
-                self.image_label.bind("<Enter>", self.on)
-                self.image_label.bind("<Leave>", self.on)
-
-            self.image_label.bind("<Button-1>", self.clicked)
-            self.image_label.bind("<Button-1>", self.clicked)
-
-        self.draw()
 
     def draw(self):
         self.canvas.delete("all")

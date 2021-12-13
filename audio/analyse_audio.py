@@ -51,22 +51,22 @@ class AnalyseAudio(Thread):
         if freq == 0:
             sys.stderr.write("Error: No frequency data. Program has potentially no access to microphone\n")
             return 0
-        return 12 * np.log2(freq / a4_freq) + 69
+        return 12 * np.log2(freq / a4_freq) + 69  # https://thesoundofnumbers.com/wp-content/uploads/2014/11/pitch_intervals_freq.pdf
 
     @staticmethod
     def num_to_freq(number, a4_freq):
         """convertis la note en une fréquence"""
-        return a4_freq * 2.0 ** ((number - 69) / 12)
+        return a4_freq * 2.0 ** ((number - 69) / 12)  # https://thesoundofnumbers.com/wp-content/uploads/2014/11/pitch_intervals_freq.pdf
 
     @staticmethod
     def num_to_note(number):
         """converti la fréquence vers le nom de la note"""
-        return AnalyseAudio.Notes_Fr[int(round(number) % 12)]
+        return AnalyseAudio.Notes_En[int(round(number) % 12)]
 
     @staticmethod
-    def freq_to_note(frequenct, a4_freq):
+    def freq_to_note(frequence, a4_freq):
         """convertis la fréquence vers la note"""
-        number = AnalyseAudio.freq_to_num(frequenct, a4_freq)
+        number = AnalyseAudio.freq_to_num(frequence, a4_freq)
         note_name = AnalyseAudio.num_to_note(number)
         return note_name
 

@@ -7,7 +7,6 @@ import numpy as np
 
 from audio.analyse_audio import AnalyseAudio
 from audio.threading_help import ProtectedList
-from audio.sound_thread import ThreadAudio
 from apparence.color import ColorManager
 from apparence.font import FontManager
 from apparence.timing import Timer
@@ -39,9 +38,6 @@ class App(tkinter.Tk):
 
         self.audio_analyzer = AnalyseAudio(self.frequency_queue)
         self.audio_analyzer.start()
-
-        self.play_sound_thread = ThreadAudio(self.main_path + "/assets/sounds/drop.wav")
-        self.play_sound_thread.start()
 
         self.timer = Timer(60)
 
