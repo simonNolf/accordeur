@@ -1,5 +1,4 @@
 import copy
-
 from pyaudio import PyAudio, paInt16
 from threading import Thread
 import numpy as np
@@ -23,7 +22,7 @@ class AnalyseAudio(Thread):
     Padding = 3
     Spectre_harmonique = 3
 
-    Notes_Fr = ["do", "la#", "re", "do#", "mi", "fa", "ré#", "sol", "fa#", "la", "sol", "si"]
+    Notes_Fr = ["do", "do#", "re", "re#", "mi", "fa", "fa#", "sol", "sol#", "la", "la#", "si"]
     Notes_En = ["A", "A#", "B", "C", "C#", "D", "D#", "E", "F", "F#", "G", "G#"]
 
     def __init__(self, queue, *args, **kwargs):
@@ -61,7 +60,7 @@ class AnalyseAudio(Thread):
     @staticmethod
     def num_to_note(number):
         """converti la fréquence vers le nom de la note"""
-        return AnalyseAudio.Notes_En[int(round(number) % 12)]
+        return AnalyseAudio.Notes_Fr[int(round(number) % 12)]
 
     @staticmethod
     def freq_to_note(frequence, a4_freq):

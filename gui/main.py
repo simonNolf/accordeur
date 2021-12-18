@@ -156,7 +156,7 @@ class Frame(tkinter.Frame):
         self.upper_canvas.itemconfig(self.lower_note_text, text=note_name_lower)
 
     def set_freq(self, frequency):
-        self.upper_canvas.itemconfig(self.frequency_text, text=str(round(frequency, 1)) + " Hz")
+        self.upper_canvas.itemconfig(self.frequency_text, text=str(round(frequency, 1)*2) + " Hz")
 
     def set_freq_diff(self, frequency):
         self.button_frequency.set_text(str(frequency))

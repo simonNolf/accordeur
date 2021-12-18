@@ -10,7 +10,6 @@ from audio.threading_help import ProtectedList
 from apparence.color import ColorManager
 from apparence.font import FontManager
 from apparence.timing import Timer
-
 from gui.main import Frame
 from gui.setting import SettingsFrame
 
@@ -136,15 +135,11 @@ class App(tkinter.Tk):
                             self.note_number_counter = 0
 
                     # change la couleur du curseur en fonction de sa position
-                    if abs(freq_difference) < 0.25:
+                    if abs(freq_difference) < 1:
                         self.main_frame.set_needle_color("green")
                         self.tone_hit_counter += 1
                     else:
                         self.main_frame.set_needle_color("red")
-                        self.tone_hit_counter = 0
-
-                    # après 7 fréquences consécutives correcte, joue le son
-                    if self.tone_hit_counter > 7:
                         self.tone_hit_counter = 0
 
                     # met à jour le buffer
@@ -157,14 +152,6 @@ class App(tkinter.Tk):
                         note_name=self.audio_analyzer.num_to_note(self.nearest_note_number_buffered),
                         note_name_lower=self.audio_analyzer.num_to_note(self.nearest_note_number_buffered - 1),
                         note_name_higher=self.audio_analyzer.num_to_note(self.nearest_note_number_buffered + 1))
-
-                    # calcule la différence en demi-pas
-                    if semitone_step == 0:
-                        diff_cents = 0
-                    else:
-                        diff_cents = (freq_difference / semitone_step) * 100
-                    freq_label_text = f"+{round(-diff_cents, 1)} demi-pas  " if -diff_cents > 0 else f"{round(-diff_cents, 1)} demi-pas"
-                    self.main_frame.set_freq_diff(freq_label_text)
 
                     # set la fréquence actuelle
                     if freq is not None: self.main_frame.set_freq(freq)
